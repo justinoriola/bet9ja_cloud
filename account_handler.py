@@ -21,41 +21,22 @@ class AccountHandler:
         self.total_number_of_cashiers = total_number_of_cashiers
 
         # Set up Firefox webdriver for Openshift deployment path
-        # self.options = FirefoxOptions()
-        # self.options.binary_location = "/usr/lib/firefox-esr/firefox-esr"  # firefox path
-        # self.options.add_argument("--headless")  # headless mode option
-        # self.options.add_argument('--disable-gpu')  # Required for headless mode on certain systems
-        # self.options.add_argument('--private-window')  # incognito mode option
-        # self.driver_path = "/usr/local/bin/geckodriver"  # geckodriver path (requirement 4 Firefox browser)
-        # self.options.log.level = "trace"  # Set the log level to trace
-        # self.options.log.file = "./geckodriver.log"  # Provide the full path to geckodriver.log
-
-
-        # Set up Firefox Webdriver in headless mode with path declaration
-        # self.options = FirefoxOptions()
-        # self.options.binary_location = "/Applications/Firefox.app/Contents/MacOS/firefox" # firefox path
-        # self.options.add_argument("--headless")  # headless mode option
-        # self.options.add_argument('--private')  # incognito mode option
-        # self.driver_path = "/opt/homebrew/bin/geckodriver"  # geckodriver path (requirement 4 Firefox browser)
-        # self.driver = webdriver.Firefox(options=self.options, executable_path=self.driver_path)
-
-
-        # Alternate way to set up Firefox driver in headless mode with no-path declaration
         self.options = FirefoxOptions()
-        self.options.add_argument('-headless')
-        self.options.add_argument('--private')  # Similar to incognito mode in Chrome
+        self.options.binary_location = "/usr/lib/firefox-esr/firefox-esr"  # firefox path
+        self.options.add_argument("--headless")  # headless mode option
+        self.options.add_argument('--disable-gpu')  # Required for headless mode on certain systems
+        self.options.add_argument('--private-window')  # incognito mode option
+        self.driver_path = "/usr/local/bin/geckodriver"  # geckodriver path (requirement 4 Firefox browser)
+        self.options.log.level = "trace"  # Set the log level to trace
+        self.options.log.file = "./geckodriver.log"  # Provide the full path to geckodriver.log
 
     def login(self):
         # Initialize Firefox driver
         print(f'\nlogging into account {self.admin_username}...')
 
-        # Instantiate Firefox driver with no-path declaration
-        self.driver = webdriver.Firefox(options=self.options)
-        self.driver.get('https://shop.bet9ja.com/')
-
         # Initialize alternative Firefox driver
-        # self.driver = webdriver.Firefox(options=self.options, executable_path=self.driver_path)
-        # self.driver.get('https://shop.bet9ja.com/')
+        self.driver = webdriver.Firefox(options=self.options, executable_path=self.driver_path)
+        self.driver.get('https://shop.bet9ja.com/')
 
 
         sign_in = self.driver.find_element(By.XPATH, '//*[@id="h_w_PC_cLogin_ctrlLogin_Username"]')
