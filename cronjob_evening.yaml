@@ -1,0 +1,24 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: okalt
+  namespace: flask-app-internal
+spec:
+  schedule: "* * * * *"  # Run every 5 minutes
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          containers:
+          - name: web
+            image: containers.cisco.com/thousandeyes-it/flask-app-test:latest
+            securityContext:
+              runAsNonRoot: true
+              runAsUser: 1009250000  # Must match the UID in the Dockerfile
+              runAsGroup: 1009250000 # Must match the GID in the Dockerfile (if needed)
+              fsGroup: 1009250000    # Must match the GID in the Dockerfile (if n
+          imagePullSecrets:
+          - name: thousandeyes-it-justins-helloworld-pull-secret
+          restartPolicy: OnFailure
+          # Ensure that the jobs do not exceed a certain runtime; this can be adjusted based on the expected task duration
+#          activeDeadlineSeconds: 2700
