@@ -1,66 +1,11 @@
 from selenium import webdriver
-from selenium.webdriver.support.ui import WebDriverWait
-from selenium.webdriver.support import expected_conditions as EC
-from selenium.webdriver.firefox.service import Service
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import Select
-from selenium.common.exceptions import NoSuchElementException, InvalidSelectorException, UnexpectedAlertPresentException, ElementClickInterceptedException
+from selenium.webdriver.chrome.service import Service as ChromeService
+from selenium.common.exceptions import NoSuchElementException, InvalidSelectorException, UnexpectedAlertPresentException
 import time
 from datetime import datetime, timedelta
 from selenium.webdriver.firefox.options import Options as FirefoxOptions
-import os
-
-ACCOUNT_CREDENTIALS = {
-    'ogba':{
-        'username': os.getenv('USERNAME_OGBA'),
-        'password': os.getenv('PASSWORD'),
-        'cashier_password': os.getenv('CASHIER_PASSWORD_OGBA'),
-        'amount_to_credit': 40000,
-        'number_of_cashier': 4,
-        'base_balance':1000000,
-        'worksheet_name': "ogba_daily_spreadsheet",
-        'worksheet_id': os.getenv('SPREADSHEET_OGBA')
-    },
-    'idiaraba':{
-        'username': os.getenv('USERNAME_IDIARABA'),
-        'password': os.getenv('PASSWORD'),
-        'cashier_password': os.getenv('CASHIER_PASSWORD_IDIARABA'),
-        'amount_to_credit': 40000,
-        'number_of_cashier': 4,
-        'base_balance':1000000,
-        'worksheet_name': "idiaraba_daily_spreadsheet",
-        'worksheet_id': os.getenv('SPREADSHEET_IDIARABA')
-    },
-    'awori': {
-        'username': os.getenv('USERNAME_AWORI'),
-        'password': os.getenv('PASSWORD'),
-        'cashier_password': os.getenv('CASHIER_PASSWORD_AWORI'),
-        'amount_to_credit': 30000,
-        'number_of_cashier': 3,
-        'base_balance':700000,
-        'worksheet_name': "awori_daily_spreadsheet",
-        'worksheet_id': os.getenv('SPREADSHEET_AWORI')
-    },
-    'moshalashi': {
-        'username': os.getenv('USERNAME_MOSH'),
-        'password': os.getenv('PASSWORD'),
-        'cashier_password': os.getenv('CASHIER_PASSWORD_MOSH'),
-        'amount_to_credit': 30000,
-        'number_of_cashier': 3,
-        'base_balance': 500000,
-        'worksheet_name': "moshalashi_daily_spreadsheet",
-        'worksheet_id': os.getenv('SPREADSHEET_MOSH'),
-    },
-
-}
-
-# create a login decorator
-def login_decorator(func):
-    def wrapper(self, *args, **kwargs):
-        self.login(*args, **kwargs)
-        func(self, *args, **kwargs)
-    return wrapper
-
 
 class AccountHandler:
 
@@ -68,19 +13,12 @@ class AccountHandler:
     TIME_NOW = datetime.now().strftime("%H:%M")
     TODAYS_DATE = datetime.now().strftime("%Y-%m-%d")
 
-    def __init__(self, account_key):
-        self.key = account_key
-        self.admin_username = ACCOUNT_CREDENTIALS[self.key]['username']
-        self.admin_password = ACCOUNT_CREDENTIALS[self.key]['password']
-        self.cashier_password = ACCOUNT_CREDENTIALS[self.key]['cashier_password']
-        self.credited_amount = ACCOUNT_CREDENTIALS[self.key]['amount_to_credit']
-        self.cashier_numbers = ACCOUNT_CREDENTIALS[self.key]['number_of_cashier']
-        self.sheet_name = ACCOUNT_CREDENTIALS[self.key]['worksheet_name']
-        self.sheet_id = ACCOUNT_CREDENTIALS[self.key]['worksheet_id']
-        self.base_balance = ACCOUNT_CREDENTIALS[self.key]['base_balance']
+    def __init__(self, admin_username: str, admin_password: str, amount_to_credit: int, total_number_of_cashiers: int):
+        self.admin_username = admin_username
+        self.admin_password = admin_password
+        self.amount_to_be_credited = amount_to_credit
         self.cashier_to_be_credited = None
-        self.password_checker = False
-        self.cashier_reset_list = []
+        self.total_number_of_cashiers = total_number_of_cashiers
 
         # Set up Firefox webdriver for Openshift deployment path
         self.options = FirefoxOptions()
@@ -92,124 +30,91 @@ class AccountHandler:
         self.options.log.level = "trace"  # Set the log level to trace
         self.options.log.file = "./geckodriver.log"  # Provide the full path to geckodriver.log
 
-    def login(self, **kwargs):
-        try:
-            # Initialize Firefox driver
-            print(f"\nlogging into {self.admin_username}...")
+    def login(self):
+        # Initialize Firefox driver
+        print(f'\nlogging into account {self.admin_username}...')
 
-            # Initialize alternative Firefox driver
-            self.driver = webdriver.Firefox(options=self.options, executable_path=self.driver_path)
+        # Initialize alternative Firefox driver
+        self.driver = webdriver.Firefox(options=self.options, executable_path=self.driver_path)
+        self.driver.get('https://shop.bet9ja.com/')
 
-            # Navigate to the website and wait up to 60 seconds for the page to load
-            self.driver.get('https://shop.bet9ja.com/')
-            WebDriverWait(self.driver, 60).until(
-                EC.presence_of_element_located((By.XPATH, '//*[@id="h_w_PC_cLogin_ctrlLogin_Username"]'))
-            )
 
-            # check for admin or cashier password
-            if self.password_checker:
-                self.admin_password = self.cashier_password
-
-            # log into admin or cashier account
-            sign_in = self.driver.find_element(By.XPATH, '//*[@id="h_w_PC_cLogin_ctrlLogin_Username"]')
-            sign_in.send_keys(self.admin_username)
-
-            # Wait for the password field to be interactable
-            WebDriverWait(self.driver, 60).until(
-                EC.element_to_be_clickable((By.XPATH, '//*[@id="h_w_PC_cLogin_ctrlLogin_Password"]'))
-            )
-            password = self.driver.find_element(By.XPATH, '//*[@id="h_w_PC_cLogin_ctrlLogin_Password"]')
-            password.send_keys(self.admin_password)
-
-            # Wait for the login button to be interactable and click it
-            WebDriverWait(self.driver, 60).until(
-                EC.element_to_be_clickable((By.ID, "h_w_PC_cLogin_ctrlLogin_lnkBtnLogin"))
-            )
-            login = self.driver.find_element(By.ID, "h_w_PC_cLogin_ctrlLogin_lnkBtnLogin")
-            login.click()
-
-            # You can add another WebDriverWait here to wait for a successful login indication
-            # For example, wait for a logout button to appear or a user profile section
-
-            print("Logged in successfully")
-        except Exception as e:
-            print(f'login error occurred', e)
+        sign_in = self.driver.find_element(By.XPATH, '//*[@id="h_w_PC_cLogin_ctrlLogin_Username"]')
+        sign_in.send_keys(self.admin_username)
+        password = self.driver.find_element(By.XPATH, '//*[@id="h_w_PC_cLogin_ctrlLogin_Password"]')
+        password.send_keys(self.admin_password)
+        time.sleep(2)
+        login = self.driver.find_element(By.ID, "h_w_PC_cLogin_ctrlLogin_lnkBtnLogin")
+        login.click()
+        time.sleep(2)
 
     def select_interaccount(self):
-        # select interaccount option from portal
         inter_account = self.driver.find_element(By.LINK_TEXT, 'Interaccount')
         inter_account.click()
 
     def iframe_func(self):
-        # select to iframe option
         iframe = self.driver.find_element(By.XPATH, '//*[@id="s_w_PC_PC_cCoupon_frameCassa"]')
         self.driver.switch_to.frame(iframe)
 
-    def cashier_iframe_func(self):
-        # switch to iframe option
-        iframe_cashier = self.driver.find_element(By.ID, "iframe-content")
-        self.driver.switch_to.frame(iframe_cashier)
-
-    # @login_decorator
     def get_admin_balance(self):
         try:
-            # instantiate account login
             self.login()
             print(f'Retrieving admin balance for {self.admin_username}')
             select_balance = self.driver.find_element(By.ID, 'hl_w_cLogin_lblDisponibilita')
             admin_balance = select_balance.text[:-2].strip().replace(',', '')
-            print('admin balance retrieved successfully.\n')
+            print('admin balance successfully retrieved\n')
             time.sleep(1)
             return round(float(admin_balance))
         except Exception as e:
             print(f'Error retrieving admin balance for {self.admin_username}: {e}')
         finally:
-            self.driver.close()
-        #     time.sleep(5)
+            self.driver.quit()
+            # Get balance on admin
 
     def deposit_options(self, i):
-        try:
-            select_drop_down = Select(
-                self.driver.find_element(By.XPATH, '//*[@id="ctl00_PC_ctrlUser_ddlUtente"]'))
-            options = [option for option in select_drop_down.options if option.text[10:].startswith('cashier')]
-            options[i].click()
-            time.sleep(3)
-            deposit_amount = self.driver.find_element(By.XPATH, '//*[@id="ctl00_PC_txtImporto"]')
-            deposit_amount.send_keys(self.credited_amount)
-            time.sleep(3)
-            submit_deposit = self.driver.find_element(By.XPATH, '//*[@id="ctl00_PC_btnAvanti"]')
-            submit_deposit.click()
-            time.sleep(3)
-            confirm_submit = self.driver.find_element(By.XPATH, '//*[@id="ctl00_PC_btnConferma"]')
-            confirm_submit.click()
-            time.sleep(2)
-            close_btn = self.driver.find_element(By.XPATH, '//*[@id="ctl00_PC_ctrlMessage_BottoneChiusura"]')
-            close_btn.click()
-            time.sleep(2)
-        except Exception as e:
-            print('An error occurred:', e)
+        select_drop_down = Select(
+            self.driver.find_element(By.XPATH, '//*[@id="ctl00_PC_ctrlUser_ddlUtente"]'))
+        options = [option for option in select_drop_down.options if option.text[10:].startswith('cashier')]
+        options[i].click()
+        time.sleep(3)
+        deposit_amount = self.driver.find_element(By.XPATH, '//*[@id="ctl00_PC_txtImporto"]')
+        deposit_amount.send_keys(self.amount_to_be_credited)
+        time.sleep(3)
+        submit_deposit = self.driver.find_element(By.XPATH, '//*[@id="ctl00_PC_btnAvanti"]')
+        submit_deposit.click()
+        time.sleep(3)
+        confirm_submit = self.driver.find_element(By.XPATH, '//*[@id="ctl00_PC_btnConferma"]')
+        confirm_submit.click()
+        time.sleep(2)
+        close_btn = self.driver.find_element(By.XPATH, '//*[@id="ctl00_PC_ctrlMessage_BottoneChiusura"]')
+        close_btn.click()
+        time.sleep(2)
 
-    def credit_cashier(self, admin_balance: int):
+    def credit_cashier(self, admin_balance):
 
         try:
             # Locate sign-in and password button, input credentials and confirm login.
             self.login()
-            print(f"\nInitiating cashier crediting for account {self.admin_username}...")
+            print(f"Initiating cashier crediting for account {self.admin_username}...")
 
             # Get into interaccount and credit cashier accounts
             self.select_interaccount()
             self.iframe_func()
 
             # Select dropdown option and credit corresponding cashier
-            if int(admin_balance) >= self.credited_amount:
+            if int(admin_balance) >= self.amount_to_be_credited:
                 if self.cashier_to_be_credited is not None:
                     i = self.cashier_to_be_credited - 1
                     self.deposit_options(i)
-                    print(f'cashier {self.cashier_to_be_credited} credited successfully for account {self.admin_username}')
+                    print(
+                        f'cashier {self.cashier_to_be_credited} credited successfully for account {self.admin_username}'
+                        f'\nDate: {self.TODAYS_DATE}, Time: {self.TIME_NOW}')
                 else:
-                    for i in range(self.cashier_numbers):
+                    for i in range(self.total_number_of_cashiers):
                         self.deposit_options(i)
-                    print(f'{self.cashier_numbers} cashiers credited successfully for account {self.admin_username}')
+                    print(
+                        f'{self.total_number_of_cashiers} cashiers credited successfully for account {self.admin_username}'
+                        f'\nDate: {self.TODAYS_DATE}, Time: {self.TIME_NOW}')
             else:
                 print("Balance on admin is low. Kindly fund account to avoid service disruption")
 
@@ -223,6 +128,7 @@ class AccountHandler:
             self.driver.quit()
 
     def withdraw_from_cashier(self):
+
         # Locate sign-in and password button, input credentials and confirm login.
         self.login()
         print(f"Initiating cashier Withdrawal for account {self.admin_username}...")
@@ -232,7 +138,7 @@ class AccountHandler:
             self.iframe_func()
 
             # Loop through the cashier options
-            for i in range(self.cashier_numbers):
+            for i in range(self.total_number_of_cashiers):
                 select_drop_down = Select(
                     self.driver.find_element(By.XPATH, '//*[@id="ctl00_PC_ctrlUser_ddlUtente"]'))
                 select_drop_down = [option for option in select_drop_down.options if
@@ -273,7 +179,9 @@ class AccountHandler:
         finally:
             self.driver.quit()
 
+
     def bet_payout(self, bet_ids: list) -> list:
+
         # Check the length of bet_id list, instantiate login, and then loop through.
         if len(bet_ids) > 0:
             self.login()
@@ -307,12 +215,12 @@ class AccountHandler:
                     except NoSuchElementException as e:
                         print(f"Bet ID: {bet} not found!")
                         time.sleep(2)
-            self.driver.quit()
+            # self.driver.quit()
             return result
 
     def winning_balance(self):
         try:
-            self.login()
+            # self.login()
             print("Retrieving winning_balance...")
             self.driver.find_element(By.LINK_TEXT, 'Bet List').click()
             time.sleep(2)
@@ -337,86 +245,14 @@ class AccountHandler:
             time.sleep(2)
             winning_value = self.driver.find_element(By.XPATH, '//*[@id="ac_w_PC_PC_BetList_VincitaTotPagina"]')
             winning = int(winning_value.get_attribute('value')[:-3].replace(',', ''))
-            print(f'winning balance retrieved successfully.')
+            print(f'admin winning balance successfully retrieved.')
             return winning
         except ValueError as e:
             return 0
         except NoSuchElementException:
             self.driver.find_element(By.LINK_TEXT, 'Bet List').click()
-        finally:
-            self.driver.quit()
-            time.sleep(3)
+        self.driver.quit()
 
-    def cashier_check(self, number_of_cashiers):
-        """"This function is used to check the cashier account for any stranded fund.
-        If found, withdraw the fund into admin"""
-
-        # output to console when logging process is initiated/set password_checker variable.
-        print(f'\nprocessing cashier league/racing reset for {self.admin_username}...')
-        self.password_checker = True
-        username = self.admin_username
-        password = self.admin_password
-
-        # loop through the number of cashiers to process stranded funds.
-        for i in range(1, (number_of_cashiers + 1)):
-            try:
-                time.sleep(2)
-                username_split_value = username.split('-')[2]
-                self.admin_username = f"cashier{username_split_value}-0{i}"
-                self.login()
-                time.sleep(1)
-
-                # Get the initial window handles
-                initial_window_handles = self.driver.window_handles
-                # interact with element within initial window_handle
-                cashier_button = self.driver.find_element(By.XPATH, '//*[@id="divContent"]/div[1]/ul/li[1]/ul/li[5]/a')
-                cashier_button.click()
-                time.sleep(3)
-
-                # Get the updated window handles
-                updated_window_handles = self.driver.window_handles
-                # Find the new tab handle by comparing the initial and updated handles
-                new_tab_handle = [handle for handle in updated_window_handles if handle not in initial_window_handles][0]
-                # Switch to the new tab
-                self.driver.switch_to.window(new_tab_handle)
-                time.sleep(5)
-
-                # switch to iframe element
-                self.cashier_iframe_func()
-                # interact with iframe content in new tab
-                reset_league = self.driver.find_element(By.XPATH, '//*[@id="root"]/div/div/div[2]/div/table/tbody/tr[1]/td[1]/div/div[2]/a')
-                reset_league.click()
-                time.sleep(2)
-                # reset_race = self.driver.find_element(By.XPATH, '//*[@id="root"]/div/div/div[2]/div/table/tbody/tr[2]/td[1]/div/div[2]/a')
-                # reset_race.click()
-                self.cashier_reset_list.append(self.admin_username)
-                print(f'stranded funds found in {self.admin_username}')
-
-                # Close the both windows
-                self.driver.close()
-                self.driver.switch_to.window(initial_window_handles[0])  # Switch back to the main tab
-                self.driver.close()  # Close the initial window
-
-                # Quit the WevDriver
-                self.driver.quit()
-
-            except (ElementClickInterceptedException, NoSuchElementException) as e:
-                print(f'no stranded fund in {self.admin_username}, tab closed!')
-                self.driver.close()
-                self.driver.quit()
-                time.sleep(5)
-            except Exception as e:
-                login_error = f'unable to login to {self.admin_username}'
-                self.cashier_reset_list.append(login_error)
-        self.password_checker = False
-        self.admin_username = username
-        self.admin_password = password
-        print('cashier reset processed successfully!')
-        if len(self.cashier_reset_list) > 0:
-            cashiers_with_stranded_funds = ', '.join(self.cashier_reset_list)
-            return f'stranded funds found in {cashiers_with_stranded_funds}'
-        else:
-            return f'no stranded funds found in cashiers'
 
 
 
