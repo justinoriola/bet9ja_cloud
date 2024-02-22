@@ -1,9 +1,9 @@
 apiVersion: batch/v1
 kind: CronJob
 metadata:
-  name: bet9ja-automation
+  name: bet9ja-automation-morning
 spec:
-  schedule: "30 20 * * *"
+  schedule: "0 6 * * *"
   jobTemplate:
     spec:
       template:
