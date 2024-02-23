@@ -1,0 +1,189 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="5a23b703-8a2c-4c92-9325-c930a385155b" name="Changes" comment="A few more twick on spreadseet and main.">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Dockerfile" beforeDir="false" afterPath="$PROJECT_DIR$/Dockerfile" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/account_checks.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/account_handler.py" beforeDir="false" afterPath="$PROJECT_DIR$/account_handler.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cronjob.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/cronjob.yaml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/Dockerfile" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/geckodriver.log" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/geckodriver.log" beforeDir="false" afterPath="$PROJECT_DIR$/geckodriver.log" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/main.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/requirements.txt" beforeDir="false" afterPath="$PROJECT_DIR$/requirements.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/spreadsheet_handler.py" beforeDir="false" afterPath="$PROJECT_DIR$/spreadsheet_handler.py" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Python Script" />
+      </list>
+    </option>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="KubernetesApiProvider">{
+  &quot;contexts&quot;: [
+    {
+      &quot;name&quot;: &quot;flask-app-internal/api-prd-rtp-01-cae-cisco-com:6443/joriola&quot;,
+      &quot;originalNamespace&quot;: &quot;flask-app-internal&quot;
+    }
+  ],
+  &quot;isMigrated&quot;: true
+}</component>
+  <component name="KubernetesSettings">
+    <option name="contextName" value="flask-app-internal/api-prd-rtp-01-cae-cisco-com:6443/joriola" />
+  </component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 5
+}</component>
+  <component name="ProjectId" id="2a7fV6k0lh9oemHxdp5uFR8sgAv" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;Python.main.executor&quot;: &quot;Run&quot;,
+    &quot;Python.test.executor&quot;: &quot;Run&quot;,
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;inlay.hints&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  }
+}</component>
+  <component name="RecentsManager">
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$" />
+    </key>
+  </component>
+  <component name="RunManager">
+    <configuration name="main" type="PythonConfigurationType" factoryName="Python" nameIsGenerated="true">
+      <module name="bet9ja_automation" />
+      <option name="ENV_FILES" value="" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/main.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+  </component>
+  <component name="SharedIndexes">
+    <attachedChunks>
+      <set>
+        <option value="bundled-python-sdk-67fca87a943a-c986f194a52a-com.jetbrains.pycharm.pro.sharedIndexes.bundled-PY-233.11799.259" />
+      </set>
+    </attachedChunks>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="5a23b703-8a2c-4c92-9325-c930a385155b" name="Changes" comment="" />
+      <created>1703674559600</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1703674559600</updated>
+      <workItem from="1703674562756" duration="1000" />
+      <workItem from="1706859490198" duration="23769000" />
+      <workItem from="1706974514558" duration="15534000" />
+      <workItem from="1707001244584" duration="257000" />
+      <workItem from="1707028655166" duration="688000" />
+      <workItem from="1707081042838" duration="17974000" />
+      <workItem from="1707139600829" duration="5406000" />
+      <workItem from="1707148216948" duration="1245000" />
+      <workItem from="1707156956538" duration="13275000" />
+      <workItem from="1707236863598" duration="6398000" />
+      <workItem from="1707255059526" duration="9333000" />
+      <workItem from="1707295624954" duration="855000" />
+      <workItem from="1707299431022" duration="1642000" />
+      <workItem from="1707306952190" duration="366000" />
+      <workItem from="1707310120962" duration="647000" />
+      <workItem from="1707311055464" duration="1790000" />
+      <workItem from="1707335862138" duration="16307000" />
+      <workItem from="1707403905701" duration="4226000" />
+      <workItem from="1707511827336" duration="14657000" />
+      <workItem from="1707589390957" duration="5687000" />
+      <workItem from="1707679667665" duration="14027000" />
+      <workItem from="1707696397347" duration="22553000" />
+      <workItem from="1707761242273" duration="8106000" />
+      <workItem from="1707855414016" duration="3830000" />
+      <workItem from="1707893201394" duration="541000" />
+      <workItem from="1707902351888" duration="202000" />
+      <workItem from="1707932654613" duration="1411000" />
+      <workItem from="1707943714466" duration="2286000" />
+    </task>
+    <task id="LOCAL-00001" summary="Make certain changes on notificaiton, cashier reset/check report.">
+      <option name="closed" value="true" />
+      <created>1707552168634</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1707552168634</updated>
+    </task>
+    <task id="LOCAL-00002" summary="A few more twick on spreadseet and main.">
+      <option name="closed" value="true" />
+      <created>1707603064300</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1707603064300</updated>
+    </task>
+    <option name="localTasksCounter" value="3" />
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="amend env phone data" />
+    <MESSAGE value="Make certain changes on notificaiton, cashier reset/check report." />
+    <MESSAGE value="A few more twick on spreadseet and main." />
+    <option name="LAST_COMMIT_MESSAGE" value="A few more twick on spreadseet and main." />
+  </component>
+  <component name="com.intellij.coverage.CoverageDataManagerImpl">
+    <SUITE FILE_PATH="coverage/bet9ja_automation$main.coverage" NAME="main Coverage Results" MODIFIED="1707979020957" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/bet9ja_automation$test.coverage" NAME="test Coverage Results" MODIFIED="1707158025477" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+  </component>
+</project>
