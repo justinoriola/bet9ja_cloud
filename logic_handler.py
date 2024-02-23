@@ -53,17 +53,16 @@ class LogicHandler():
 
     def text(self, username, shop_code, **kwargs):
         message = (
-            # f"\n{'-' * 30}\n"
             f"\n{shop_code.title()}: {username}\n"
             f"{TODAY}, {TODAYS_DATE}.\n"
             f"{'-' * 30}\n"
-            f"base_balance     {kwargs.get('base_balance'):>n}\n"
-            f"float            {kwargs.get('float'):>n}\n"
-            f"expenses         {kwargs.get('expenses'):>n}\n"
-            f"banking          {kwargs.get('banking'):>n}\n"
-            f"winning          {kwargs.get('winning'):>n}\n"
-            f"cash_in_shop     {kwargs.get('closing_balance'):>n}\n"
-            f"admin_balance    {kwargs.get('admin_balance'):>n}\n"
+            f"base_balance....{kwargs.get('base_balance'):>n}\n"
+            f"float....{kwargs.get('float'):>n}\n"
+            f"expenses....{kwargs.get('expenses'):>n}\n"
+            f"banking....{kwargs.get('banking'):>n}\n"
+            f"winning....{kwargs.get('winning'):>n}\n"
+            f"cash_in_shop....{kwargs.get('closing_balance'):>n}\n"
+            f"admin_balance....{kwargs.get('admin_balance'):>n}\n"
             f"{'-' * 30}"
         )
         return message.strip()

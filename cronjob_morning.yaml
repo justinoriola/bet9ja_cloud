@@ -1,0 +1,15 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: bet9ja-automation-morning
+spec:
+  schedule: "0 6 * * *"
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          containers:
+          - name: bet9ja-automation
+            image: gcr.io/lateral-client-410016/bet9ja_automation:latest  # Replace with the path to your image in GCR
+            # args or command if needed
+          restartPolicy: OnFailure

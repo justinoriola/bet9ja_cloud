@@ -1,4 +1,7 @@
-from selenium import webdriver
+
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
+from selenium.webdriver.firefox.service import Service
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import Select
 from selenium.common.exceptions import NoSuchElementException, InvalidSelectorException, UnexpectedAlertPresentException, ElementClickInterceptedException
@@ -96,7 +99,12 @@ class AccountHandler:
 
             # Initialize alternative Firefox driver
             self.driver = webdriver.Firefox(options=self.options, executable_path=self.driver_path)
+
+            # Navigate to the website and wait up to 60 seconds for the page to load
             self.driver.get('https://shop.bet9ja.com/')
+            WebDriverWait(self.driver, 60).until(
+                EC.presence_of_element_located((By.XPATH, '//*[@id="h_w_PC_cLogin_ctrlLogin_Username"]'))
+            )
 
             # check for admin or cashier password
             if self.password_checker:
@@ -105,12 +113,24 @@ class AccountHandler:
             # log into admin or cashier account
             sign_in = self.driver.find_element(By.XPATH, '//*[@id="h_w_PC_cLogin_ctrlLogin_Username"]')
             sign_in.send_keys(self.admin_username)
+
+            # Wait for the password field to be interactable
+            WebDriverWait(self.driver, 60).until(
+                EC.element_to_be_clickable((By.XPATH, '//*[@id="h_w_PC_cLogin_ctrlLogin_Password"]'))
+            )
             password = self.driver.find_element(By.XPATH, '//*[@id="h_w_PC_cLogin_ctrlLogin_Password"]')
             password.send_keys(self.admin_password)
-            time.sleep(2)
+
+            # Wait for the login button to be interactable and click it
+            WebDriverWait(self.driver, 60).until(
+                EC.element_to_be_clickable((By.ID, "h_w_PC_cLogin_ctrlLogin_lnkBtnLogin"))
+            )
             login = self.driver.find_element(By.ID, "h_w_PC_cLogin_ctrlLogin_lnkBtnLogin")
             login.click()
-            time.sleep(2)
+
+            # You can add another WebDriverWait here to wait for a successful login indication
+            # For example, wait for a logout button to appear or a user profile section
+
             print("Logged in successfully")
         except Exception as e:
             print(f'login error occurred', e)
